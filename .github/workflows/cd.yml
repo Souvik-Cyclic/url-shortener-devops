@@ -22,25 +22,50 @@ jobs:
         uses: actions/checkout@v4
 
         # -------------------------------------------------------
-        # 2. Deploy to Kubernetes Cluster
+        # 2. Apply Kubernetes Manifests
         # -------------------------------------------------------
-      - name: Deploy to Kubernetes
+      - name: Apply Kubernetes manifests
         run: |
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
 
         # -------------------------------------------------------
-        # 3. Verify Deployment
+        # 3. Restart Deployment
+        # -------------------------------------------------------
+      - name: Restart deployment
+        run: |
+          kubectl rollout restart deployment/url-shortener
+
+        # -------------------------------------------------------
+        # 4. Verify Rollout Status
         # -------------------------------------------------------
       - name: Verify rollout
         run: |
           kubectl rollout status deployment/url-shortener
 
         # -------------------------------------------------------
-        # 4. DAST (Dynamic Application Security Testing) - Health Check
+        # 5. Dummy DAST - Runtime Security Validation
         # -------------------------------------------------------
-      - name: DAST - Health Check
+      - name: Dummy DAST - Basic Runtime Security Checks
         run: |
-          echo "Waiting for service..."
+          echo "Waiting for service to be ready..."
           sleep 10
-          curl -f http://localhost:30001/health
+
+          TARGET="http://localhost:30001"
+
+          echo "1. Checking service availability..."
+          curl -f $TARGET/health
+
+          echo "2. Fetching response headers..."
+          curl -I $TARGET | tee headers.txt
+
+          echo "3. Checking basic security headers..."
+
+          grep -qi "x-content-type-options" headers.txt || echo "⚠ Missing X-Content-Type-Options"
+          grep -qi "x-frame-options" headers.txt || echo "⚠ Missing X-Frame-Options"
+          grep -qi "content-security-policy" headers.txt || echo "⚠ Missing Content-Security-Policy"
+
+          echo "4. Basic response validation..."
+          curl -s -o /dev/null -w "%{http_code}" $TARGET | grep -E "200|301|302"
+
+          echo "Dummy DAST completed successfully."
