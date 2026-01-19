@@ -56,5 +56,5 @@ func (h *URLHandler) Health(c *gin.Context) {
 }
 
 func (h *URLHandler) Hello(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"message": "Hello, World!"})
+	c.JSON(http.StatusOK, gin.H{"message": "Hello!"})
 }

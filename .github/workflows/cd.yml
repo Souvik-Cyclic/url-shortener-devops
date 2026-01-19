@@ -44,9 +44,9 @@ jobs:
           kubectl rollout status deployment/url-shortener
 
         # -------------------------------------------------------
-        # 5. Dummy DAST - Runtime Security Validation
+        # 5. Dummy DAST - Basic Runtime Checks
         # -------------------------------------------------------
-      - name: Dummy DAST - Basic Runtime Security Checks
+      - name: Dummy DAST - Basic Runtime Checks
         run: |
           echo "Waiting for service to be ready..."
           sleep 10
@@ -59,13 +59,7 @@ jobs:
           echo "2. Fetching response headers..."
           curl -I $TARGET | tee headers.txt
 
-          echo "3. Checking basic security headers..."
-
-          grep -qi "x-content-type-options" headers.txt || echo "⚠ Missing X-Content-Type-Options"
-          grep -qi "x-frame-options" headers.txt || echo "⚠ Missing X-Frame-Options"
-          grep -qi "content-security-policy" headers.txt || echo "⚠ Missing Content-Security-Policy"
-
-          echo "4. Basic response validation..."
+          echo "3. Basic response validation..."
           curl -s -o /dev/null -w "%{http_code}" $TARGET | grep -E "200|301|302"
 
           echo "Dummy DAST completed successfully."

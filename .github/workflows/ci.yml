@@ -77,7 +77,6 @@ jobs:
       - name: Docker Build
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/url-shortener-devops:latest .
-          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/url-shortener-devops:latest ${{ secrets.DOCKERHUB_USERNAME }}/url-shortener-devops:${{ github.sha }}
 
         # -------------------------------------------------------
         # 9. Trivy - Container Image Security Scanning
@@ -126,4 +125,3 @@ jobs:
       - name: Push Docker Image
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/url-shortener-devops:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/url-shortener-devops:${{ github.sha }}
