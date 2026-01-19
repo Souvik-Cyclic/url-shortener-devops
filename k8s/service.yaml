@@ -10,4 +10,4 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8080
-      nodePort: 30007 # Fixed NodePort for easier access/testing
+      nodePort: 30001 # Fixed NodePort for easier access/testing. Available range: 30000-32767
