@@ -20,7 +20,7 @@ func main() {
 	r.POST("/shorten", urlHandler.Shorten)
 	r.GET("/r/:code", urlHandler.Redirect)
 	r.GET("/health", urlHandler.Health)
-	r.GET("/hello", urlHandler.Hello)
+	r.GET("/", urlHandler.Hello)
 
 	// Run server
 	log.Println("Starting server on :8080")
