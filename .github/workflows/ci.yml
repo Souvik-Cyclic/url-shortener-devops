@@ -60,7 +60,7 @@ jobs:
         # 6. Unit Testing
         # -------------------------------------------------------
       - name: Run Unit Tests
-        run: go test -v ./...
+        run: GIN_MODE=test go test ./tests/...
 
         # -------------------------------------------------------
         # 7. Build Application

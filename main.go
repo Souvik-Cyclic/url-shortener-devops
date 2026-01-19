@@ -9,6 +9,8 @@ import (
 )
 
 func main() {
+	gin.SetMode(gin.ReleaseMode)
+
 	// Initialize service
 	shortenerService := service.NewShortenerService()
 	urlHandler := handler.NewURLHandler(shortenerService)
