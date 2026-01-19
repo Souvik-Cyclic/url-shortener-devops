@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: url-shortener
-          image: soucy/url-shortener-devops:latest
+          image: IMAGE_PLACEHOLDER
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

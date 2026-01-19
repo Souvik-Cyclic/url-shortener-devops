@@ -15,37 +15,43 @@ jobs:
       github.event.workflow_run.head_branch == 'main'
 
     steps:
-        # -------------------------------------------------------
-        # 1. Checkout Code
-        # -------------------------------------------------------
+      # -------------------------------------------------------
+      # 1. Checkout Code
+      # -------------------------------------------------------
       - name: Checkout repository
         uses: actions/checkout@v4
 
-        # -------------------------------------------------------
-        # 2. Apply Kubernetes Manifests
-        # -------------------------------------------------------
-      - name: Apply Kubernetes manifests
+      # -------------------------------------------------------
+      # 2. Inject Docker Image and Apply Kubernetes Manifests
+      # -------------------------------------------------------
+      - name: Deploy to Kubernetes
         run: |
+          IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/url-shortener-devops:latest"
+
+          echo "Deploying image: $IMAGE"
+
+          sed -i "s|IMAGE_PLACEHOLDER|$IMAGE|g" k8s/deployment.yaml
+
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
 
-        # -------------------------------------------------------
-        # 3. Restart Deployment
-        # -------------------------------------------------------
+      # -------------------------------------------------------
+      # 3. Restart Deployment
+      # -------------------------------------------------------
       - name: Restart deployment
         run: |
           kubectl rollout restart deployment/url-shortener
 
-        # -------------------------------------------------------
-        # 4. Verify Rollout Status
-        # -------------------------------------------------------
+      # -------------------------------------------------------
+      # 4. Verify Rollout Status
+      # -------------------------------------------------------
       - name: Verify rollout
         run: |
           kubectl rollout status deployment/url-shortener
 
-        # -------------------------------------------------------
-        # 5. Dummy DAST - Basic Runtime Checks
-        # -------------------------------------------------------
+      # -------------------------------------------------------
+      # 5. Dummy DAST - Basic Runtime Checks
+      # -------------------------------------------------------
       - name: Dummy DAST - Basic Runtime Checks
         run: |
           echo "Waiting for service to be ready..."
