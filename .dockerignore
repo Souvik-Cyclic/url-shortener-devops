@@ -1,0 +1,47 @@
+# Ignore Go build output
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Ignore vendor directory
+vendor/
+
+# Ignore dependency directories
+Gopkg.lock
+Gopkg.toml
+
+# Ignore IDE/editor files
+*.swp
+*.swo
+*.idea/
+.vscode/
+*.iml
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore test output
+*.out
+
+# Ignore Kubernetes manifests
+k8s/
+
+tests/
+
+# Ignore Git files
+.git
+.gitignore
+
+# GitHub
+.github
+
+# Ignore documentation and images
+architecture.png
+project_report.md
+project_report.pdf
+README.md
